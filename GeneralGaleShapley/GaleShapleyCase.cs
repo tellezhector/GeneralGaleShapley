@@ -3,13 +3,6 @@ using System.Linq;
 
 namespace GeneralGaleShapley
 {
-	public enum States
-	{
-		Unknown = -1,
-		Unrequested = 0,
-		Matched = 1,
-		Rejected = 2
-	}
 
 	public class GaleShapleyCase
 	{
@@ -91,14 +84,14 @@ namespace GeneralGaleShapley
 
 		States[][] InitializeStatesMatrix (int persons, int preferencesSize)
 		{
-			var matrix = new States[persons][];
-			var preflength = matrix [0].Length;
+			States[][] matrix = new States[persons][];
+			var random = new Random ();
 			for(int i = 0; i < persons; i++)
 			{
-
-				for (int j = 0; j < preflength; i++)
+				matrix[i] = new States[preferencesSize];
+				for (int j = 0; j < preferencesSize; j++)
 				{
-					matrix [i] [j] = States.Unrequested;
+					matrix [i] [j] = (States)random.Next(-1, 3);
 				}
 			}
 
@@ -119,12 +112,12 @@ namespace GeneralGaleShapley
 		public void Print()
 		{
 			Console.WriteLine ("Men's matrix:");
-			PrintMatrix (MenMatrix);
+			PrintMatrix (MenMatrix, MenStatesMatrix);
 			Console.WriteLine ("Women's matrix:");
-			PrintMatrix (WomenMatrix);
+			PrintMatrix (WomenMatrix, WomenStatesMatrix);
 		}
 
-		private void PrintMatrix (int[][] matrix)
+		private void PrintMatrix (int[][] matrix, States[][] states)
 		{
 			int persons = matrix.Length;
 			int preferencesLength = matrix [0].Length;
@@ -135,10 +128,44 @@ namespace GeneralGaleShapley
 			Console.WriteLine(new String('-', lineLengt));
 			for (int i = 0; i < persons; i++)
 			{
-				string lineName = i.ToString().PadRight(pad1);
-				string preferences = string.Join(",", matrix[i].Select(s => s.ToString().PadLeft(pad2)));
-				string line = string.Format("{0}|{1}", lineName, preferences);
-				Console.WriteLine (line);
+				Console.Write (string.Format ("{0}|", i.ToString ().PadRight (pad1)));
+				for (int j = 0; j < preferencesLength; j++)
+				{
+					var s = matrix [i] [j].ToString ().PadLeft (pad2);
+					switch (states [i] [j])
+					{
+						case States.Matched:
+							Console.BackgroundColor = ConsoleColor.Green;
+							Console.ForegroundColor	= ConsoleColor.White;
+							break;
+						
+						case States.Unrequested:
+							Console.ResetColor ();
+							break;
+						
+						case States.Rejected:
+							Console.BackgroundColor = ConsoleColor.Red;
+							Console.ForegroundColor = ConsoleColor.White;
+							break;
+
+						case States.Unknown:
+							Console.BackgroundColor = ConsoleColor.Black;
+							Console.ForegroundColor = ConsoleColor.White;
+							break;
+					}
+
+					Console.Write (s);
+					Console.ResetColor();
+					if (j == preferencesLength - 1)
+					{
+						Console.Write ("|");
+					} 
+					else
+					{
+						Console.Write (",");
+					}
+				}
+				Console.WriteLine ();
 			}
 			Console.WriteLine(new String('-', lineLengt));
 		}
