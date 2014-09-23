@@ -1,5 +1,0 @@
-/home/htellez/Projects/GeneralGaleShapley/GeneralGaleShapley/obj/x86/Debug/.NETFramework,Version=v4.0.AssemblyAttribute.cs
-/home/htellez/Projects/GeneralGaleShapley/GeneralGaleShapley/bin/Debug/GeneralGaleShapley.exe.mdb
-/home/htellez/Projects/GeneralGaleShapley/GeneralGaleShapley/bin/Debug/GeneralGaleShapley.exe
-/home/htellez/Projects/GeneralGaleShapley/GeneralGaleShapley/obj/x86/Debug/GeneralGaleShapley.exe
-/home/htellez/Projects/GeneralGaleShapley/GeneralGaleShapley/obj/x86/Debug/GeneralGaleShapley.exe.mdb
