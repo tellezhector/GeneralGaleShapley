@@ -3,8 +3,10 @@ using System.Linq;
 
 namespace GeneralGaleShapley
 {
+    using System.Collections.Generic;
+    using System.Globalization;
 
-	public class GaleShapleyCase
+    public class GaleShapleyCase
 	{
 		public GaleShapleyCase(int n) : this(n, n){}
 
@@ -18,71 +20,52 @@ namespace GeneralGaleShapley
 			{
 				throw new NotSupportedException ("Only positive integers allowed.");
 			}
+
 			Men = men;
 			Women = women;
+            
+            MenPreferencesMatrix = InitializePreferencesMatrix(Men, Women);
+            WomenPreferencesMatrix = InitializePreferencesMatrix(Women, Men);
+            
+            MenPreferencesReverseIndex = InitializePreferencesReverseIndex(MenPreferencesMatrix);
+            WomenPreferencesReverseIndex = InitializePreferencesReverseIndex(WomenPreferencesMatrix);
+
+            MenStatesMatrix = InitializeStatesMatrix(Men, Women);
+		    WomenStatesMatrix = CopyStatesFromMen();
 		}
 
-		int[][] _menMatrix;
+        public int[][] MenPreferencesMatrix { get; private set; }
 
-		int[][] _womenMatrix;
+        public States[][] MenStatesMatrix { get; private set; }
 
-		States[][] _menStatesMatrix;
+        public int[][] WomenPreferencesMatrix { get; private set; }
 
-		States[][] _womenStatesMatrix;
+        public States[][] WomenStatesMatrix { get; private set; }
+        
+        //reverse index;
+        public Dictionary<int, Dictionary<int, int>> MenPreferencesReverseIndex { get; private set; }
 
-		public int[][] MenMatrix 
-		{
-			get
-			{
-				if(_menMatrix == null)
-				{
-					_menMatrix = InitializePreferencesMatrix (Men, Women);
-				}
-		
-				return _menMatrix; 
-			}
-		}
+        //reverse index;
+        public Dictionary<int, Dictionary<int, int>> WomenPreferencesReverseIndex { get; private set; }
 
-		public States[][] MenStatesMatrix
-		{
-			get
-			{
-				if (_menStatesMatrix == null)
-				{
-					_menStatesMatrix = InitializeStatesMatrix (Men, Women);
-				}
+        private States[][] CopyStatesFromMen()
+        {
+            var states = new States[Women][];
+            for (int w = 0; w < Women; w++)
+            {
+                states[w] = new States[Men];
+                for (int j = 0; j < Men; j++)
+                {
+                    int m = WomenPreferencesMatrix[w][j];
+                    States state = MenStatesMatrix[m][MenPreferencesReverseIndex[m][w]];
+                    states[w][j] = state;
+                }
+            }
 
-				return _menStatesMatrix;
-			}
-		}
+            return states;
+        }
 
-		public int[][] WomenMatrix 
-		{
-			get
-			{
-				if(_womenMatrix == null)
-				{
-					_womenMatrix = InitializePreferencesMatrix (Women, Men);
-				}
-
-				return _womenMatrix; 
-			}
-		}
-
-		public States[][] WomenStatesMatrix
-		{
-			get
-			{ 
-				if (_womenStatesMatrix == null)
-				{
-					_womenStatesMatrix = InitializeStatesMatrix (Women, Men);
-				}
-
-				return _womenStatesMatrix;
-			}
-		}
-
-		States[][] InitializeStatesMatrix (int persons, int preferencesSize)
+        private static States[][] InitializeStatesMatrix(int persons, int preferencesSize)
 		{
 			States[][] matrix = new States[persons][];
 			var random = new Random ();
@@ -98,7 +81,25 @@ namespace GeneralGaleShapley
 			return matrix; 		
 		}
 
-		private int[][] InitializePreferencesMatrix(int persons, int preferencesSize){
+
+        private static Dictionary<int, Dictionary<int, int>> InitializePreferencesReverseIndex(int[][] matrix)
+        {
+            var dictionary = new Dictionary<int, Dictionary<int, int>>();
+            var persons = matrix.Length;
+            var prefLength = matrix[0].Length;
+            for (int i = 0; i < persons; i++)
+            {
+                dictionary.Add(i, new Dictionary<int, int>());
+                for (int j = 0; j < prefLength; j++)
+                {
+                    dictionary[i].Add(matrix[i][j], j);
+                }
+            }
+
+            return dictionary;
+        }
+
+		private static int[][] InitializePreferencesMatrix(int persons, int preferencesSize){
 			var matrix = new int[persons][];
 			Permutations permutations = new Permutations(preferencesSize);
 			for(int i = 0; i < persons; i++)
@@ -112,12 +113,12 @@ namespace GeneralGaleShapley
 		public void Print()
 		{
 			Console.WriteLine ("Men's matrix:");
-			PrintMatrix (MenMatrix, MenStatesMatrix);
+			PrintMatrix (MenPreferencesMatrix, MenStatesMatrix);
 			Console.WriteLine ("Women's matrix:");
-			PrintMatrix (WomenMatrix, WomenStatesMatrix);
+			PrintMatrix (WomenPreferencesMatrix, WomenStatesMatrix);
 		}
 
-		private void PrintMatrix (int[][] matrix, States[][] states)
+		private static void PrintMatrix (int[][] matrix, States[][] states)
 		{
 			int persons = matrix.Length;
 			int preferencesLength = matrix [0].Length;
@@ -128,7 +129,7 @@ namespace GeneralGaleShapley
 			Console.WriteLine(new String('-', lineLengt));
 			for (int i = 0; i < persons; i++)
 			{
-				Console.Write (string.Format ("{0}|", i.ToString ().PadRight (pad1)));
+				Console.Write ("{0}|", i.ToString ().PadRight (pad1));
 				for (int j = 0; j < preferencesLength; j++)
 				{
 					var s = matrix [i] [j].ToString ().PadLeft (pad2);
@@ -140,7 +141,8 @@ namespace GeneralGaleShapley
 							break;
 						
 						case States.Unrequested:
-							Console.ResetColor ();
+                            Console.BackgroundColor = ConsoleColor.Gray;
+							Console.ForegroundColor = ConsoleColor.White;
 							break;
 						
 						case States.Rejected:
@@ -149,7 +151,7 @@ namespace GeneralGaleShapley
 							break;
 
 						case States.Unknown:
-							Console.BackgroundColor = ConsoleColor.Black;
+							Console.BackgroundColor = ConsoleColor.DarkGray;
 							Console.ForegroundColor = ConsoleColor.White;
 							break;
 					}
