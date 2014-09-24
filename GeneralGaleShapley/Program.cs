@@ -1,13 +1,12 @@
 ﻿namespace GeneralGaleShapley
 {
     using System;
-    using System.Collections;
 
     public class MainClass
 	{
 		public static void Main (string[] args)
 		{
-		    for (int i = 1; i <= 16; i++)
+		    for (int i = 1; i <= 1000; i++)
 		    {
 		        for (int j = 0; j < 1000; j++)
 		        {
@@ -15,7 +14,7 @@
                     ClassicGaleShapley cgs = new ClassicGaleShapley(gs);
                     cgs.Solve();
 
-                    Console.WriteLine("{0} {1} {2}", i, cgs.Comparisons, cgs.Elpased.Milliseconds);
+                    Console.WriteLine("{0} {1} {2}", i, cgs.Comparisons, cgs.Elpased.Ticks);
 		        }    
 		    }
 		}

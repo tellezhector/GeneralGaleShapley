@@ -3,11 +3,12 @@
 namespace GeneralGaleShapley
 {
     using System.Collections.Generic;
-    using System.Resources;
 
     public class GaleShapleyCase
 	{
-		public GaleShapleyCase(int n, StatesInizialitation statesInizialitation) : this(n, n, statesInizialitation){}
+        private static Random _random;
+
+        public GaleShapleyCase(int n, StatesInizialitation statesInizialitation) : this(n, n, statesInizialitation){}
 
 		public int Men { get; private set; }
 
@@ -75,10 +76,22 @@ namespace GeneralGaleShapley
             return states;
         }
 
+        private static Random Random
+        {
+            get
+            {
+                if (_random == null)
+                {
+                    _random = new Random();
+                }
+
+                return _random;
+            }
+        }
+
         private States[][] InitializeMenStates()
 		{
 			States[][] matrix = new States[Men][];
-			var random = new Random ();
 			for(int i = 0; i < Men; i++)
 			{
 				matrix[i] = new States[Women];
@@ -88,7 +101,7 @@ namespace GeneralGaleShapley
 				    switch (StatesInizialitation)
 				    {
 				        case StatesInizialitation.Random:
-                            state = (States)random.Next(-1, 3);
+                            state = (States)Random.Next(-1, 3);
 				        break;
 
                         case StatesInizialitation.Unrequested:
@@ -96,7 +109,7 @@ namespace GeneralGaleShapley
 				        break;
 
                         case StatesInizialitation.UnrequestedAndUnknown:
-				            state = (States)random.Next(-1, 1);
+                        state = (States)Random.Next(-1, 1);
 				        break;
 				    }
 

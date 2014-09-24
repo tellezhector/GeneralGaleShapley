@@ -9,11 +9,11 @@ namespace GeneralGaleShapley
 	{
 		public int Size { get; set; }
 
-		private Random _random;
+		private static Random _random;
 
 		private static Dictionary<int, int> _factorials = new Dictionary<int, int>();
 
-		private Random Random
+		private static Random Random
 		{
 			get
 			{
@@ -49,28 +49,23 @@ namespace GeneralGaleShapley
 			return permutation.ToList();
 		}
 
-		private static int Factorial(int n){
-			if (n < 0)
-			{
-				throw new NotSupportedException ("Undefined factorial for negative numbers.");
-			}
-
-			if (n == 0)
-			{
-				return 1;
-			}
-	
-			if (!_factorials.ContainsKey (n))
-			{
-				_factorials.Add (n, n*Factorial (n - 1));
-			}
-
-			return _factorials [n];
-		}
-
 		public List<int> RandomPermutation()
 		{
-			return NumberedPermutation (Random.Next(0, Factorial(Size)));
+            int[] permutation = new int[Size];
+            List<int> available = new List<int>();
+            for (int i = 0; i < Size; i++)
+            {
+                available.Add(i);
+            }
+            
+            for (int i = 0; i < Size; i++)
+            {
+                int random = Random.Next(0, Size - i);
+                permutation[i] = available[random];
+                available.RemoveAt(random);
+            }
+
+		    return permutation.ToList();
 		}
 	}
 }
