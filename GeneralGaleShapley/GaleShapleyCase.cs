@@ -30,8 +30,8 @@ namespace GeneralGaleShapley
             MenPreferencesReverseIndex = InitializePreferencesReverseIndex(MenPreferencesMatrix);
             WomenPreferencesReverseIndex = InitializePreferencesReverseIndex(WomenPreferencesMatrix);
 
-            MenStatesMatrix = InitializeStatesMatrix(Men, Women);
-		    WomenStatesMatrix = CopyStatesFromMen();
+            MenStatesMatrix = InitializeMenStates();
+		    WomenStatesMatrix = InitializeWomenStates();
 		}
 
         public int[][] MenPreferencesMatrix { get; private set; }
@@ -48,7 +48,7 @@ namespace GeneralGaleShapley
         //reverse index;
         public Dictionary<int, Dictionary<int, int>> WomenPreferencesReverseIndex { get; private set; }
 
-        private States[][] CopyStatesFromMen()
+        private States[][] InitializeWomenStates()
         {
             var states = new States[Women][];
             for (int w = 0; w < Women; w++)
@@ -65,14 +65,14 @@ namespace GeneralGaleShapley
             return states;
         }
 
-        private static States[][] InitializeStatesMatrix(int persons, int preferencesSize)
+        private States[][] InitializeMenStates()
 		{
-			States[][] matrix = new States[persons][];
+			States[][] matrix = new States[Men][];
 			var random = new Random ();
-			for(int i = 0; i < persons; i++)
+			for(int i = 0; i < Men; i++)
 			{
-				matrix[i] = new States[preferencesSize];
-				for (int j = 0; j < preferencesSize; j++)
+				matrix[i] = new States[Women];
+				for (int j = 0; j < Women; j++)
 				{
 					matrix [i] [j] = (States)random.Next(-1, 3);
 				}
@@ -81,6 +81,27 @@ namespace GeneralGaleShapley
 			return matrix; 		
 		}
 
+		public void Print()
+		{
+			Console.WriteLine ("Men's matrix:");
+			PrintMatrix (MenPreferencesMatrix, MenStatesMatrix);
+			Console.WriteLine ("Women's matrix:");
+			PrintMatrix (WomenPreferencesMatrix, WomenStatesMatrix);
+		    PrintColorMeanings();
+		}
+
+        private static void PrintColorMeanings()
+        {
+            SetMatchedStateColors();
+            Console.WriteLine("Matched");
+            SetUnrequestedStateColors();
+            Console.WriteLine("Unrequested");
+            SetRejectedStateColors();
+            Console.WriteLine("Rejected");
+            SetUnknownStateColors();
+            Console.WriteLine("Unknown");
+            Console.ResetColor();
+        }
 
         private static Dictionary<int, Dictionary<int, int>> InitializePreferencesReverseIndex(int[][] matrix)
         {
@@ -99,24 +120,17 @@ namespace GeneralGaleShapley
             return dictionary;
         }
 
-		private static int[][] InitializePreferencesMatrix(int persons, int preferencesSize){
-			var matrix = new int[persons][];
-			Permutations permutations = new Permutations(preferencesSize);
-			for(int i = 0; i < persons; i++)
-			{
-				matrix [i] = permutations.RandomPermutation().ToArray();
-			}
+        private static int[][] InitializePreferencesMatrix(int persons, int preferencesSize)
+        {
+            var matrix = new int[persons][];
+            Permutations permutations = new Permutations(preferencesSize);
+            for (int i = 0; i < persons; i++)
+            {
+                matrix[i] = permutations.RandomPermutation().ToArray();
+            }
 
-			return matrix; 
-		}
-
-		public void Print()
-		{
-			Console.WriteLine ("Men's matrix:");
-			PrintMatrix (MenPreferencesMatrix, MenStatesMatrix);
-			Console.WriteLine ("Women's matrix:");
-			PrintMatrix (WomenPreferencesMatrix, WomenStatesMatrix);
-		}
+            return matrix;
+        }
 
 		private static void PrintMatrix (int[][] matrix, States[][] states)
 		{
@@ -129,31 +143,27 @@ namespace GeneralGaleShapley
 			Console.WriteLine(new String('-', lineLengt));
 			for (int i = 0; i < persons; i++)
 			{
-				Console.Write ("{0}|", i.ToString ().PadRight (pad1));
+				Console.Write ("{0}|", i.ToString().PadRight (pad1));
 				for (int j = 0; j < preferencesLength; j++)
 				{
-					var s = matrix [i] [j].ToString ().PadLeft (pad2);
+					var s = matrix [i] [j].ToString().PadLeft (pad2);
 					switch (states [i] [j])
 					{
 						case States.Matched:
-							Console.BackgroundColor = ConsoleColor.Green;
-							Console.ForegroundColor	= ConsoleColor.White;
-							break;
+							SetMatchedStateColors();
+					        break;
 						
 						case States.Unrequested:
-                            Console.BackgroundColor = ConsoleColor.Gray;
-							Console.ForegroundColor = ConsoleColor.White;
-							break;
+                            SetUnrequestedStateColors();
+					        break;
 						
 						case States.Rejected:
-							Console.BackgroundColor = ConsoleColor.Red;
-							Console.ForegroundColor = ConsoleColor.White;
-							break;
+							SetRejectedStateColors();
+					        break;
 
 						case States.Unknown:
-							Console.BackgroundColor = ConsoleColor.DarkGray;
-							Console.ForegroundColor = ConsoleColor.White;
-							break;
+							SetUnknownStateColors();
+					        break;
 					}
 
 					Console.Write (s);
@@ -171,5 +181,29 @@ namespace GeneralGaleShapley
 			}
 			Console.WriteLine(new String('-', lineLengt));
 		}
+
+        private static void SetUnknownStateColors()
+        {
+            Console.BackgroundColor = ConsoleColor.DarkGray;
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+
+        private static void SetRejectedStateColors()
+        {
+            Console.BackgroundColor = ConsoleColor.Red;
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+
+        private static void SetUnrequestedStateColors()
+        {
+            Console.BackgroundColor = ConsoleColor.Gray;
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+
+        private static void SetMatchedStateColors()
+        {
+            Console.BackgroundColor = ConsoleColor.Green;
+            Console.ForegroundColor = ConsoleColor.White;
+        }
 	} 
 }

@@ -1,12 +1,10 @@
-﻿using System;
-
-namespace GeneralGaleShapley
+﻿namespace GeneralGaleShapley
 {
-	class MainClass
+	public class MainClass
 	{
 		public static void Main (string[] args)
 		{
-			var gs = new GaleShapleyCase (5, 3);
+			GaleShapleyCase gs = new GaleShapleyCase (5, 3);
 			gs.Print ();
 		}
 	}
