@@ -1,20 +1,19 @@
 ﻿using System;
-using System.Linq;
 
 namespace GeneralGaleShapley
 {
     using System.Collections.Generic;
-    using System.Globalization;
+    using System.Resources;
 
     public class GaleShapleyCase
 	{
-		public GaleShapleyCase(int n) : this(n, n){}
+		public GaleShapleyCase(int n, StatesInizialitation statesInizialitation) : this(n, n, statesInizialitation){}
 
 		public int Men { get; private set; }
 
 		public int Women { get; private set; }
 
-		public GaleShapleyCase (int men, int women)
+		public GaleShapleyCase (int men, int women, StatesInizialitation statesInizialitation)
 		{
 			if (men <= 0 || women <= 0)
 			{
@@ -23,6 +22,7 @@ namespace GeneralGaleShapley
 
 			Men = men;
 			Women = women;
+		    StatesInizialitation = statesInizialitation;
             
             MenPreferencesMatrix = InitializePreferencesMatrix(Men, Women);
             WomenPreferencesMatrix = InitializePreferencesMatrix(Women, Men);
@@ -34,6 +34,8 @@ namespace GeneralGaleShapley
 		    WomenStatesMatrix = InitializeWomenStates();
 		}
 
+        private StatesInizialitation StatesInizialitation { get; set; }
+
         public int[][] MenPreferencesMatrix { get; private set; }
 
         public States[][] MenStatesMatrix { get; private set; }
@@ -41,7 +43,15 @@ namespace GeneralGaleShapley
         public int[][] WomenPreferencesMatrix { get; private set; }
 
         public States[][] WomenStatesMatrix { get; private set; }
-        
+
+        public void UpdateState(int man, int woman, States state)
+        {
+            int w = MenPreferencesReverseIndex[man][woman];
+            MenStatesMatrix[man][w] = state;
+            int m = WomenPreferencesReverseIndex[woman][man];
+            WomenStatesMatrix[woman][m] = state;
+        }
+
         //reverse index;
         public Dictionary<int, Dictionary<int, int>> MenPreferencesReverseIndex { get; private set; }
 
@@ -74,7 +84,23 @@ namespace GeneralGaleShapley
 				matrix[i] = new States[Women];
 				for (int j = 0; j < Women; j++)
 				{
-					matrix [i] [j] = (States)random.Next(-1, 3);
+				    States state = States.Unrequested;
+				    switch (StatesInizialitation)
+				    {
+				        case StatesInizialitation.Random:
+                            state = (States)random.Next(-1, 3);
+				        break;
+
+                        case StatesInizialitation.Unrequested:
+                            state = States.Unrequested;
+				        break;
+
+                        case StatesInizialitation.UnrequestedAndUnknown:
+				            state = (States)random.Next(-1, 1);
+				        break;
+				    }
+
+				    matrix[i][j] = state;
 				}
 			}
 
