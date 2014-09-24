@@ -1,20 +1,23 @@
 ﻿namespace GeneralGaleShapley
 {
-	public class MainClass
+    using System;
+    using System.Collections;
+
+    public class MainClass
 	{
 		public static void Main (string[] args)
 		{
-			GaleShapleyCase gs = new GaleShapleyCase(5, 3, StatesInizialitation.Random);
-			gs.Print();
+		    for (int i = 1; i <= 16; i++)
+		    {
+		        for (int j = 0; j < 1000; j++)
+		        {
+                    GaleShapleyCase gs = new GaleShapleyCase(i, StatesInizialitation.Unrequested);
+                    ClassicGaleShapley cgs = new ClassicGaleShapley(gs);
+                    cgs.Solve();
 
-            gs = new GaleShapleyCase(5, 3, StatesInizialitation.UnrequestedAndUnknown);
-            gs.Print();
-
-            gs = new GaleShapleyCase(5, 3, StatesInizialitation.Unrequested);
-            gs.Print();
-
-            gs.UpdateState(0, 0, States.Matched);
-            gs.Print();
+                    Console.WriteLine("{0} {1} {2}", i, cgs.Comparisons, cgs.Elpased.Milliseconds);
+		        }    
+		    }
 		}
 	}
 }
