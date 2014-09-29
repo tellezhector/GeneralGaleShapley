@@ -4,6 +4,6 @@ function void = create_plottable()
     i  = 3*(0:(l-1));
     n = means(i+1);
     iterations = means(i+2);
-    y = [n; iterations; n; n; n; n .* n];
+    y = [n; iterations; n; n; n; n .* n; n; n .* log(n); n; 2 * (n .* log(n))];
     dlmwrite("plottable.txt", y', " ");
 endfunction
