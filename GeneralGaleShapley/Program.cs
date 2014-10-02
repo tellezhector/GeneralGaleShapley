@@ -9,7 +9,7 @@
 		public static void Main (string[] args)
 		{
 			int min = 1;
-			int max = 1000;
+			int max = 100;
 			for (int i = 0; i < args.Length; i++)
 			{
 				try
@@ -20,9 +20,15 @@
 							DisplayHelp ();
 							return;
 						case "-c":
-						case "-min":
-						case "-max":
 							throw new NotImplementedException ("Not ready, stay tuned.");
+						case "-min":
+							i++;
+							min = int.Parse (args[i]);
+							break;
+						case "-max":
+							i++;
+							max = int.Parse (args[i]);
+							break;
 					}
 				}
 				catch
@@ -30,15 +36,6 @@
 					DisplayHelp ();
 					throw;
 				}
-			}
-
-			if (args.Length > 0)
-			{
-				min = int.Parse (args[0]);
-			}
-			if (args.Length > 1)
-			{
-				max = int.Parse (args[1]);
 			}
 
 			string filename = string.Format ("results{0}-{1}.txt", min, max);
@@ -71,9 +68,11 @@
 		static void DisplayHelp ()
 		{
 			Console.WriteLine ("-h               Show this help.");
-			Console.WriteLine ("-c <casename>    Algorithm version to be used. Options are: Classic, UnknownResentful, UnknownForgivers");
-			Console.WriteLine ("-min <n>         Min size to be simulated.");
-			Console.WriteLine ("-max <n>         Max size to be simulated.");
+			Console.WriteLine ("-c <casename>    Algorithm version to be used. Options are:");
+			Console.WriteLine ("                 Classic, UnknownResentful, UnknownForgivers.");
+			Console.WriteLine ("                 Default Classic.");
+			Console.WriteLine ("-min <n>         Min size to be simulated. Default 1.");
+			Console.WriteLine ("-max <n>         Max size to be simulated. Default 100.");
 		}
 	}
 }
