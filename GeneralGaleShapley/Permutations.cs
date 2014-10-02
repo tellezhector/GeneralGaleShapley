@@ -11,8 +11,6 @@ namespace GeneralGaleShapley
 
 		private static Random _random;
 
-		private static Dictionary<int, int> _factorials = new Dictionary<int, int>();
-
 		private static Random Random
 		{
 			get

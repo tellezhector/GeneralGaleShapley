@@ -10,6 +10,18 @@
 		{
 			int n = 1;
 			int m = 1000;
+			for (int i = 0; i < args.Length; i++)
+			{
+				switch (args [i])
+				{
+					case "-h":
+					case "-c":
+					case "-min":
+					case "-max":
+						throw new NotImplementedException ("Not ready, stay tuned.");
+				}
+			}
+
 			if (args.Length > 0)
 			{
 				n = int.Parse (args[0]);
