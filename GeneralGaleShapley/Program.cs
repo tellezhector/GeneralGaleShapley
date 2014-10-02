@@ -8,38 +8,46 @@
 	{
 		public static void Main (string[] args)
 		{
-			int n = 1;
-			int m = 1000;
+			int min = 1;
+			int max = 1000;
 			for (int i = 0; i < args.Length; i++)
 			{
-				switch (args [i])
+				try
 				{
-					case "-h":
-						DisplayHelp ();
-						return;
-					case "-c":
-					case "-min":
-					case "-max":
-						throw new NotImplementedException ("Not ready, stay tuned.");
+					switch (args [i])
+					{
+						case "-h":
+							DisplayHelp ();
+							return;
+						case "-c":
+						case "-min":
+						case "-max":
+							throw new NotImplementedException ("Not ready, stay tuned.");
+					}
+				}
+				catch
+				{ 
+					DisplayHelp ();
+					throw;
 				}
 			}
 
 			if (args.Length > 0)
 			{
-				n = int.Parse (args[0]);
+				min = int.Parse (args[0]);
 			}
 			if (args.Length > 1)
 			{
-				m = int.Parse (args[1]);
+				max = int.Parse (args[1]);
 			}
 
-			string filename = string.Format ("results{0}-{1}.txt", n, m);
+			string filename = string.Format ("results{0}-{1}.txt", min, max);
 			string cwd = Directory.GetCurrentDirectory();
 			string path = Path.Combine (cwd, filename);
 			Console.WriteLine (path);
 			using (StreamWriter sw = new StreamWriter (path, false, Encoding.UTF8))
 			{
-				for (int i = n; i <= m; i++)
+				for (int i = min; i <= max; i++)
 			    {
 					Console.WriteLine ("Parsing cases of size {0}", i);
 					int repetitions = 1000;
