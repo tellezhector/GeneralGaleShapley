@@ -15,6 +15,8 @@
 				switch (args [i])
 				{
 					case "-h":
+						DisplayHelp ();
+						return;
 					case "-c":
 					case "-min":
 					case "-max":
@@ -56,6 +58,14 @@
 					Console.WriteLine();
 			    }
 			}
+		}
+
+		static void DisplayHelp ()
+		{
+			Console.WriteLine ("-h               Show this help.");
+			Console.WriteLine ("-c <casename>    Algorithm version to be used. Options are: Classic, UnknownResentful, UnknownForgivers");
+			Console.WriteLine ("-min <n>         Min size to be simulated.");
+			Console.WriteLine ("-max <n>         Max size to be simulated.");
 		}
 	}
 }
