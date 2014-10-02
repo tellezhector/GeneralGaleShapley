@@ -2,3 +2,8 @@
 */obj/*
 *.exe
 *.dll
+results.txt
+results.rar
+*~
+plottable.txt
+results.ps
