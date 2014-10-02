@@ -6,10 +6,18 @@
 
     public class MainClass
 	{
+		private enum AlgorithmCase
+		{
+			Classic,
+			UnknownResentful,
+			UnknownForgivers
+		}
+
 		public static void Main (string[] args)
 		{
 			int min = 1;
 			int max = 100;
+			AlgorithmCase acase = AlgorithmCase.Classic;
 			for (int i = 0; i < args.Length; i++)
 			{
 				try
@@ -20,11 +28,15 @@
 							DisplayHelp ();
 							return;
 						case "-c":
-							throw new NotImplementedException ("Not ready, stay tuned.");
+							i++;
+							acase = Str2Case(args[i]);
+							break;
+
 						case "-min":
 							i++;
 							min = int.Parse (args[i]);
 							break;
+
 						case "-max":
 							i++;
 							max = int.Parse (args[i]);
@@ -38,7 +50,7 @@
 				}
 			}
 
-			string filename = string.Format ("results{0}-{1}.txt", min, max);
+			string filename = string.Format ("results_{0}_{1}-{2}.txt", acase, min, max);
 			string cwd = Directory.GetCurrentDirectory();
 			string path = Path.Combine (cwd, filename);
 			Console.WriteLine (path);
@@ -65,7 +77,26 @@
 			}
 		}
 
-		static void DisplayHelp ()
+		private static AlgorithmCase Str2Case (string input)
+		{
+			string name = input.ToLowerInvariant ();
+			switch(name)
+			{
+				case "classic":
+					return AlgorithmCase.Classic;
+
+				case "unknownforgivers":
+					return AlgorithmCase.UnknownForgivers;
+
+				case "unknownresentful":
+					return AlgorithmCase.UnknownResentful;
+
+			}
+					
+			throw new NotSupportedException(string.Format("Case {0} is not supported.", input));
+		}
+
+		private static void DisplayHelp ()
 		{
 			Console.WriteLine ("-h               Show this help.");
 			Console.WriteLine ("-c <casename>    Algorithm version to be used. Options are:");
