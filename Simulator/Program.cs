@@ -1,8 +1,8 @@
-﻿namespace GeneralGaleShapley
+﻿namespace Simulator
 {
     using System;
-	using System.IO;
-	using System.Text;
+    using System.IO;
+    using System.Text;
 
     public class MainClass
 	{

@@ -1,4 +1,4 @@
-namespace GeneralGaleShapley
+namespace Simulator
 {
     using System;
     using System.Collections.Generic;

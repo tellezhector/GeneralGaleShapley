@@ -1,7 +1,6 @@
-﻿using System;
-
-namespace GeneralGaleShapley
+﻿namespace Simulator
 {
+    using System;
     using System.Collections.Generic;
 
     public class GaleShapleyCase

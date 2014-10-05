@@ -1,11 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace GeneralGaleShapley
+namespace Simulator
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
-	public class Permutations
+    public class Permutations
 	{
 		public int Size { get; set; }
 

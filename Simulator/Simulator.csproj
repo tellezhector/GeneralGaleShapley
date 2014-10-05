@@ -5,8 +5,8 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProjectGuid>{8C8A61C6-FBF8-4891-BB46-2CF4E17E870E}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>GeneralGaleShapley</RootNamespace>
-    <AssemblyName>GeneralGaleShapley</AssemblyName>
+    <RootNamespace>Simulator</RootNamespace>
+    <AssemblyName>Simulator</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>

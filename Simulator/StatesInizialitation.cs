@@ -1,4 +1,4 @@
-﻿namespace GeneralGaleShapley
+﻿namespace Simulator
 {
     public enum StatesInizialitation
     {
