@@ -8,3 +8,6 @@ results.rar
 plottable.txt
 results.ps
 GeneralGaleShapley/results*txt
+*.log
+*.aux
+*.out
